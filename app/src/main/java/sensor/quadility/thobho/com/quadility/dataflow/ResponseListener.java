@@ -5,6 +5,9 @@ import com.android.volley.VolleyError;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
 
 
 public class ResponseListener<JSONObject> implements Response.Listener<JSONObject> , Response.ErrorListener{
@@ -13,6 +16,7 @@ public class ResponseListener<JSONObject> implements Response.Listener<JSONObjec
 
     @Override
     public void onErrorResponse(VolleyError error) {
+        requestStatus.setLastError(error.getMessage());
         requestStatus.incrementError();
     }
 
@@ -22,7 +26,7 @@ public class ResponseListener<JSONObject> implements Response.Listener<JSONObjec
         requestStatus.setLastSuccess(new Date());
     }
 
-    public RequestStatus getRequestStatus() {
-        return requestStatus;
+    public Observable<RequestStatus> getRequestStatus() {
+        return Observable.interval(1, TimeUnit.SECONDS).map(x -> requestStatus);
     }
 }

@@ -17,10 +17,11 @@ public class SensorEventBuffer implements SensorEventListener{
     private SensorManager sensorManager;
 
     private FixedSizeQueue<SensorEvent> accumulatedEvents;
-    private static final int BUFFER_SIZE = 10000;
+    private int bufferSize = 10000;
 
-    public SensorEventBuffer(Context context) {
-        this.accumulatedEvents = new FixedSizeQueue<>(BUFFER_SIZE);
+    public SensorEventBuffer(Context context, int bufferSize) {
+        this.bufferSize = bufferSize;
+        this.accumulatedEvents = new FixedSizeQueue<>(bufferSize);
         sensorManager = (SensorManager) context.getSystemService(SENSOR_SERVICE);
     }
 
@@ -38,7 +39,7 @@ public class SensorEventBuffer implements SensorEventListener{
     }
 
     public void resetBuffer(){
-        accumulatedEvents = new FixedSizeQueue<>(BUFFER_SIZE);
+        accumulatedEvents = new FixedSizeQueue<>(bufferSize);
     }
 
     @Override
@@ -49,5 +50,13 @@ public class SensorEventBuffer implements SensorEventListener{
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
+    }
+
+    public int getBufferSize() {
+        return bufferSize;
+    }
+
+    public void setBufferSize(int bufferSize) {
+        this.bufferSize = bufferSize;
     }
 }

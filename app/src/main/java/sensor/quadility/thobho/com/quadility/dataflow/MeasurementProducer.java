@@ -12,7 +12,7 @@ import sensor.quadility.thobho.com.quadility.message.Measurement;
 
 import static android.content.Context.LOCATION_SERVICE;
 
-public class MeasurementStream {
+public class MeasurementProducer {
 
     private LocationListener locationListener;
     private LocationManager locationManager;
@@ -20,14 +20,9 @@ public class MeasurementStream {
 
     private Location previousLocation;
 
-    public MeasurementStream(Context context) {
+    public MeasurementProducer(Context context, int bufferSize) {
         locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
-        sensorEventBuffer = new SensorEventBuffer(context);
-    }
-
-    public void stop() {
-        locationManager.removeUpdates(locationListener);
-        sensorEventBuffer.stop();
+        sensorEventBuffer = new SensorEventBuffer(context, bufferSize);
     }
 
     @SuppressLint("MissingPermission")
@@ -68,4 +63,12 @@ public class MeasurementStream {
         });
     }
 
+    public void stop() {
+        locationManager.removeUpdates(locationListener);
+        sensorEventBuffer.stop();
+    }
+
+    public void setBufforSize(int newBufferSize){
+        this.sensorEventBuffer.setBufferSize(newBufferSize);
+    }
 }

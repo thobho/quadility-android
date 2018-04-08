@@ -7,11 +7,7 @@ public class RequestStatus {
     private int successNumber;
     private int errorNumber;
     private Date lastSuccess = new Date();
-    private int allAccelerometerMeasurements;
-
-    public void addAccelerometerMeasurement(int add) {
-        allAccelerometerMeasurements += add;
-    }
+    private String lastError;
 
     public void incrementSuccess() {
         successNumber++;
@@ -39,8 +35,16 @@ public class RequestStatus {
         this.lastSuccess = lastSuccess;
     }
 
+    public String getLastError() {
+        return lastError;
+    }
+
+    public void setLastError(String lastError) {
+        this.lastError = lastError;
+    }
+
     @Override
     public String toString() {
-        return String.format("AML: %d\nSUCCESS COUNT: %d\n(last at: %s)\n ERRORS: %d", allAccelerometerMeasurements/(successNumber+errorNumber+1), successNumber, lastSuccess, errorNumber);
+        return String.format("SUCCESS COUNT: %d\n(last at: %s)\n ERRORS: %d \n %s", successNumber, lastSuccess, errorNumber, lastError);
     }
 }
